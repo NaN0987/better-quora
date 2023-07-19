@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Quora but Less Shitty",
     "description": "Makes the Quora website easier to use.",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "icons": { 
       "16": "images/icon-16.png",
       "32": "images/icon-32.png",
@@ -22,10 +22,12 @@
       "cookies"
     ],
 
-    "content_scripts": [
-      {
-        "js": ["scripts/content.js"],
-        "matches": ["https://*.quora.com/*"]
-      }
-    ]
+    "content_scripts": [ {
+      "js": ["scripts/content.js"],
+      "matches": ["https://*.quora.com/*"]
+    } ],
+
+    "background": {
+      "service_worker": "scripts/service_worker.js"
+    }
 }
