@@ -19,4 +19,3 @@ Planned features:
         -Include an option to turn off dark mode
         -Include an option to remove the AI response to questions
         -Include an option to remove "related questions" box in feed
-        -Include an option to
