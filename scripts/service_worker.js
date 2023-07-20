@@ -1,6 +1,11 @@
 /* NOTE TO SELF: cookies can only be accessed in background scripts, which the documentation happens to not mention at all. */
 
 //cookie details objects
+const m_s = {
+  name: "m-s",
+  url: "https://quora.com"
+}
+
 const m_b = {
   name: "m-b",
   url: "https://quora.com"
@@ -60,10 +65,11 @@ function changeCookieValue(cookieDetails, value){
 }
 
 function removeSignupWall(){
-  chrome.cookies.remove(m_b)
-  chrome.cookies.remove(m_b_lax)
-  chrome.cookies.remove(m_b_strict)
-  chrome.cookies.remove(m_signup_form_type)
+  //chrome.cookies.remove(m_s)
+  //chrome.cookies.remove(m_b)
+  //chrome.cookies.remove(m_b_lax)
+  //chrome.cookies.remove(m_b_strict)
+  chrome.cookies.remove(m_signup_form_type) 
 }
 
 function setDarkMode(){
@@ -78,7 +84,6 @@ function setLightMode(){
 chrome.runtime.onInstalled.addListener(function(details){
   if(details.reason == "install"){
     //run code on first install
-    removeSignupWall()
     setDarkMode()
   }
   else if(details.reason == "update"){
@@ -88,8 +93,8 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 chrome.runtime.onMessage.addListener(function(message){
   if(message.message === "contentPageLoaded"){
+    //run code when loading up quora
     console.log("message recieved!")
-    //removeSignupWall()
   }
 })
 

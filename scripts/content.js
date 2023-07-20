@@ -24,11 +24,26 @@ const cb_docChange = (mutationsList, observer) => {
 //Send message to notify that quora is being opened
 chrome.runtime.sendMessage({message: "contentPageLoaded"})
 
-//Main section of webpage containing posts
-const pageMain = document.querySelector("#mainContent > div:nth-child(4)")
+//Main section of webpage containing posts​
+const pageMain = document.querySelector("#mainContent > div:not([class])")
 
 //Run code if main section of page exists
 if(pageMain){
+  console.log("Main page detected")
+
+  //Remove signup wall
+  const signupWall = document.querySelector("#root > div > div.q-box > div:nth-child(2) > div")
+
+  if(signupWall){
+    console.log("signup page detected")
+    signupWall.remove()
+    //This is fucking stupid
+    //document.querySelector("#root > div > div.q-box > div:nth-child(1)").removeAttribute("filter")
+    //document.querySelector("body").removeAttribute("overflow")
+    document.querySelector("#root > div > div.q-box > div:nth-child(1)").style.filter = "none"
+    document.querySelector("body").style.overflow = "initial"
+  }
+
   //Remove ads that appear on the right side of the screen
   const sideAd = document.querySelector("#root > div > div.q-box > div:nth-child(1) > div.q-box.puppeteer_test_question_main > div > div:nth-child(2) > div > div > div.q-sticky")
   sideAd?.remove()
