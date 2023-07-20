@@ -1,0 +1,80 @@
+/* NOTE TO SELF: cookies can only be accessed in background scripts, which the documentation happens to not mention at all. */
+
+//cookie details objects
+const m_b = {
+  name: "m-b",
+  url: "https://quora.com"
+}
+
+const m_b_lax = {
+  name: "m-b_lax",
+  url: "https://quora.com"
+}
+
+const m_b_strict = {
+  name: "m-b_strict",
+  url: "https://quora.com"
+}
+
+const m_signup_form_type = {
+  name: "m-signup_form_type",
+  url: "https://quora.com"
+}
+
+const m_theme = {
+  name: "m-theme",
+  url: "https://quora.com",
+}
+
+//This function allows you to change the value of a cookie using only its CookieDetails (unlike chrome.cookies.set())
+//cookie: CookieDetails, value: string
+function changeCookieValue(cookieDetails, value){
+  chrome.cookies.get(cookieDetails, function(cookie){
+    console.log(cookie)
+    if(cookie){
+      chrome.cookies.set({
+        url: cookieDetails.url,
+        name: cookie.name,
+        value: value,
+        domain: cookie.domain,
+        path: cookie.path,
+        secure: cookie.secure,
+        httpOnly: cookie.httpOnly,
+        sameSite: cookie.sameSite,
+        expirationDate: (cookie.expirationDate ?? 2000000000), //Fix later
+        storeId: cookie.storeId
+      })
+    }
+    else{
+      console.log("WARNING: the cookie you're trying to change the value of does not exist: ", cookieDetails)
+    }      
+  })
+}
+
+function removeSignupWall(){
+  chrome.cookies.remove(m_b)
+  chrome.cookies.remove(m_b_lax)
+  chrome.cookies.remove(m_b_strict)
+  chrome.cookies.remove(m_signup_form_type)
+}
+
+function setDarkMode(){
+  changeCookieValue(m_theme, "dark")
+}
+
+function setLightMode(){
+  changeCookieValue(m_theme, "light")
+}
+
+// Check whether new version is installed
+chrome.runtime.onInstalled.addListener(function(details){
+  if(details.reason == "install"){
+    //run code on first install
+    removeSignupWall()
+    setDarkMode()
+  }
+  else if(details.reason == "update"){
+    //run code on update
+  }
+})
+
