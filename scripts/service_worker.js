@@ -41,12 +41,20 @@ function changeCookieValue(cookieDetails, value){
         secure: cookie.secure,
         httpOnly: cookie.httpOnly,
         sameSite: cookie.sameSite,
-        expirationDate: (cookie.expirationDate ?? 2000000000), //Fix later
+        expirationDate: (cookie.expirationDate ?? 2000000000), //2033 in unix epoch (fix later)
         storeId: cookie.storeId
       })
     }
     else{
       console.log("WARNING: the cookie you're trying to change the value of does not exist: ", cookieDetails)
+      chrome.cookies.set({
+        url: cookieDetails.url,
+        name: cookieDetails.name,
+        value: value,
+        domain: ".quora.com",
+        path: "/",
+        expirationDate: 2000000000, //2033 in unix epoch (fix later)
+      })
     }      
   })
 }
@@ -75,6 +83,13 @@ chrome.runtime.onInstalled.addListener(function(details){
   }
   else if(details.reason == "update"){
     //run code on update
+  }
+})
+
+chrome.runtime.onMessage.addListener(function(message){
+  if(message.message === "contentPageLoaded"){
+    console.log("message recieved!")
+    //removeSignupWall()
   }
 })
 

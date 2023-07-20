@@ -2,11 +2,10 @@
 //Removing "promoted" posts
 function removeDataNosnippet(){
   const elements = document.querySelectorAll('span[data-nosnippet="true"]') //Note: this also selects ads that are already hidden. fix later
-  console.log(elements.length)
   if(elements.length > 0){
+    console.log(elements.length)
     elements.forEach((element) => {
       element.parentElement.style.display = "none"
-      console.log("Promote removed")
     })
   }
 }
@@ -21,6 +20,9 @@ const cb_docChange = (mutationsList, observer) => {
     }
   }
 }
+
+//Send message to notify that quora is being opened
+chrome.runtime.sendMessage({message: "contentPageLoaded"})
 
 //Main section of webpage containing posts
 const pageMain = document.querySelector("#mainContent > div:nth-child(4)")
