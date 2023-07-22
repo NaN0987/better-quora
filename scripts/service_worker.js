@@ -80,7 +80,7 @@ function setLightMode(){
   changeCookieValue(m_theme, "light")
 }
 
-// Check whether new version is installed
+//Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details){
   if(details.reason == "install"){
     //run code on first install
@@ -91,10 +91,29 @@ chrome.runtime.onInstalled.addListener(function(details){
   }
 })
 
+//Sleeping function for testing
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//Javascript has finally broken me into learning how to use async functions :(
+//Edit: ok it's actually not that difficult
+async function fetchTesting(){
+  let response = await fetch("https://www.quora.com/What-is-the-difference-between-a-wet-and-a-dry-clutch")
+  let data = await response.text()
+  await sleep(5000)
+
+  //convert the string into an HTML element
+  // const parser = new DOMParser();
+  // const doc = parser.parseFromString(data, "text/html");
+  console.log("web data: ", data)  
+}
+
 chrome.runtime.onMessage.addListener(function(message){
-  if(message.message === "contentPageLoaded"){
+  if(message.message === "fetchQuestionDetails"){
     //run code when loading up quora
     console.log("message recieved!")
+    //fetchTesting()
   }
 })
 

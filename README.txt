@@ -3,6 +3,7 @@ Current features:
     -Removes ads under the question header
     -Removes "Promoted" questions
     -Removes "sponsered" posts that appear when you click "read more"
+    -Removes "Related Questions" boxes from feed
     -Modifying cookies
         -Setting Quora to dark mode by default
 
