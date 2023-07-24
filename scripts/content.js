@@ -16,12 +16,12 @@ const qs_bottomRelatedQuestions = "#mainContent > div.q-box.qu-mt--small > div.d
 
 //Removing "promoted" posts
 function removeDataNosnippet(){
-  const elements = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
+  const ads = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
   
-  if (elements.length > 0){
-    console.log("Data nosnippet: ", elements.length)
+  if (ads.length > 0){
+    console.log("Data nosnippet: ", ads.length)
 
-    elements.forEach((element) => {
+    ads.forEach((element) => {
       element.parentElement.style.display = "none"
     })
   }
@@ -29,12 +29,19 @@ function removeDataNosnippet(){
 
 //Removing related question boxes
 function removeRelatedQuestions(){
-  const elements = document.querySelectorAll(qs_relatedQuestionBox) //Note: this also selects related questions that are already hidden. fix later
+  //Removed related box at the bottom
+  const relatedBoxBottom = document.querySelector(qs_bottomRelatedQuestions)?.parentElement
   
-  if (elements.length > 0){
-    console.log("Related questions: ", elements.length)
+  if (relatedBoxBottom){
+    relatedBoxBottom.style.display = "none"
+  }
+  
+  const relatedBoxes = document.querySelectorAll(qs_relatedQuestionBox) //Note: this also selects related questions that are already hidden. fix later
+  
+  if (relatedBoxes.length > 0){
+    console.log("Related questions: ", relatedBoxes.length)
 
-    elements.forEach((element) => {
+    relatedBoxes.forEach((element) => {
       //Makes sure that the ai response isn't also removed
       if(element.firstChild.style.position !== "relative"){
         element.style.display = "none"
@@ -117,8 +124,6 @@ if (questionFeed){
   sideAd?.remove()
 
   //Remove "related questions" at the bottom of the screen
-  const relatedBox = document.querySelector(qs_bottomRelatedQuestions)?.parentElement
-  relatedBox?.remove()
   removeRelatedQuestions()
 
   //Remove ad under header (as well as promoted posts)
