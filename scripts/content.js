@@ -14,12 +14,13 @@ const qs_sideAds = "#root > div > div.q-box > div:nth-child(1) > div.q-box.puppe
 
 const qs_bottomRelatedQuestions = "#mainContent > div.q-box.qu-mt--small > div.dom_annotate_related_questions"
 
+const qs_questionComments = "#mainContent > div.q-box.qu-bg--raised > div:nth-child(2) > div.q-box"
+
 //Removing "promoted" posts
 function removeDataNosnippet(){
   const ads = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
   
   if (ads.length > 0){
-    console.log("Data nosnippet: ", ads.length)
 
     ads.forEach((element) => {
       element.parentElement.style.display = "none"
@@ -39,7 +40,6 @@ function removeRelatedQuestions(){
   const relatedBoxes = document.querySelectorAll(qs_relatedQuestionBox) //Note: this also selects related questions that are already hidden. fix later
   
   if (relatedBoxes.length > 0){
-    console.log("Related questions: ", relatedBoxes.length)
 
     relatedBoxes.forEach((element) => {
       //Makes sure that the ai response isn't also removed
@@ -76,10 +76,30 @@ function addCommentButton(){
 
   const htmlCode = '<hr/><a href="' + reformatURL(document.URL) + '/comments' + '"><h6 style="text-decoration: underline;">Comments</h6></a>'
 
-  const newElement = document.createElement('div')
-  newElement.innerHTML = htmlCode
+  const commentsButton = document.createElement('div')
+  commentsButton.innerHTML = htmlCode
 
-  questionTitle.insertAdjacentElement('afterend', newElement)
+  questionTitle.insertAdjacentElement('afterend', commentsButton)
+
+  //load iframe of comments section
+  const iframe = document.createElement('iframe')
+  iframe.src = reformatURL(document.URL) + '/comments'
+  iframe.style.display = 'none'
+  commentsButton.insertAdjacentElement('afterend', iframe)
+
+  iframe.onload = function(){
+    //select all of the comments
+    const comments = iframe.contentWindow.document.querySelectorAll(qs_questionComments)
+
+    console.log("Number of comments: ", comments.length)
+    if(comments.length === 1){
+      commentsButton.querySelector("h6").innerText = "1 Comment"
+    }
+    else{
+      commentsButton.querySelector("h6").innerText = comments.length + " Comments"
+    }
+    iframe.remove()
+  }
 }
 
 //callback for observer
@@ -93,8 +113,6 @@ const cb_docChange = (mutationsList, observer) => {
     }
   }
 }
-
-//Note to self: the current url of the DOM can be accessed with document.URL (returns a string and includes the "https://" part of the url)
 
 //Main section of webpage containing posts​
 const questionFeed = document.querySelector(qs_questionFeed)
