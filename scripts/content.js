@@ -16,6 +16,8 @@ const qs_bottomRelatedQuestions = "#mainContent > div.q-box.qu-mt--small > div.d
 
 const qs_questionComments = "#mainContent > div.q-box.qu-bg--raised > div:nth-child(2) > div.q-box"
 
+const qs_commentAuthor = "div > div > div > div > div > div > div > div.q-flex.qu-alignItems--flex-start > div > div.q-box > span.q-box > span > div > a > div > span > span"
+
 //Removing "promoted" posts
 function removeDataNosnippet(){
   const ads = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
@@ -70,8 +72,8 @@ function reformatURL(url){
   return result
 }
 
-//Add "comments" button to post
-function addCommentButton(){
+//Add "comments" button to post and adds question details if available
+function scrapCommentSection(){
   const questionTitle = document.querySelector(qs_questionTitle)
 
   const htmlCode = '<hr/><a href="' + reformatURL(document.URL) + '/comments' + '"><h6 style="text-decoration: underline;">Comments</h6></a>'
@@ -87,17 +89,57 @@ function addCommentButton(){
   iframe.style.display = 'none'
   commentsButton.insertAdjacentElement('afterend', iframe)
 
+  //Activates when the iframe loads
   iframe.onload = function(){
     //select all of the comments
     const comments = iframe.contentWindow.document.querySelectorAll(qs_questionComments)
 
+    //state how many comments there are
     console.log("Number of comments: ", comments.length)
-    if(comments.length === 1){
+    if (comments.length === 1){
       commentsButton.querySelector("h6").innerText = "1 Comment"
+    }
+    else if(comments[comments.length-1]?.querySelector("button")){
+      commentsButton.querySelector("h6").innerText = comments.length + "+ Comments"
     }
     else{
       commentsButton.querySelector("h6").innerText = comments.length + " Comments"
     }
+    
+    const details = []
+    
+    //check each comment to see if it's from Quora Details bot or the original poster, and add its text to details
+    comments.forEach((comment) => {
+      const author = comment.querySelector(qs_commentAuthor)
+      if (author){
+        if (author.innerText === "Quora Question Details Bot"){
+          details.push(comment.querySelector("div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"))
+        }
+      }
+      else{
+        console.warn("Apparently this comment doesn't have an author: ", comment)
+      }
+    })
+
+    //spacing for details
+    if (details.length > 0){
+      questionTitle.insertAdjacentElement("afterend", document.createElement('hr'))
+    }
+
+
+    //append details under question title
+    details.forEach((commentContent) => {
+      const divider = document.createElement("hr") //divider in case there's multiple comments
+      divider.style.cssText = "border-width: 1px; border-style: inset;"
+
+      //fix font size
+      commentContent.style.cssText += "font-size: calc(15px * var(--dynamic-font-scale, 1))!important;"
+
+      //append them before the comments button
+      commentsButton.insertAdjacentElement('beforebegin', commentContent)
+      commentsButton.insertAdjacentElement('beforebegin', divider)
+    })
+
     iframe.remove()
   }
 }
@@ -121,11 +163,8 @@ const questionFeed = document.querySelector(qs_questionFeed)
 if (questionFeed){
   console.log("Question feed detected")
 
-  //Send message to notify that a question is being viewed
-  chrome.runtime.sendMessage({message: "fetchQuestionDetails"})
-
-  //add "comments" button under question title
-  addCommentButton()
+  //add "comments" button under question title and get question details
+  scrapCommentSection()
 
   //Remove signup wall
   const signupWall = document.querySelector(qs_signupWall)

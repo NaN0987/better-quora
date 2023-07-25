@@ -51,7 +51,7 @@ function changeCookieValue(cookieDetails, value){
       })
     }
     else{
-      console.log("WARNING: the cookie you're trying to change the value of does not exist: ", cookieDetails)
+      console.warn("WARNING: the cookie you're trying to change the value of does not exist: ", cookieDetails)
       chrome.cookies.set({
         url: cookieDetails.url,
         name: cookieDetails.name,
@@ -94,19 +94,6 @@ chrome.runtime.onInstalled.addListener(function(details){
 //Sleeping function for testing
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-//Javascript has finally broken me into learning how to use async functions :(
-//Edit: ok it's actually not that difficult
-async function fetchTesting(){
-  let response = await fetch("https://www.quora.com/What-is-the-difference-between-a-wet-and-a-dry-clutch")
-  let data = await response.text()
-  await sleep(5000)
-
-  //convert the string into an HTML element
-  // const parser = new DOMParser();
-  // const doc = parser.parseFromString(data, "text/html");
-  console.log("web data: ", data)  
 }
 
 chrome.runtime.onMessage.addListener(function(message){
