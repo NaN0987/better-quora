@@ -10,11 +10,14 @@ Current features:
     -Removes "please sign in to continue" popup, which can appear while browsing the site
     -Adds a "comments" button to the question that shows how many questions there are
     -Adds question details (if available):
-        -All comments from the Quora Question Details Bot will appear under the question title
+        -All comments from the Quora Question Details Bot and the original poster will appear under the question title
 
 Planned features:
-    -Scrape comments from the original poster
-    -Make something appear in the popup (not sure what to put there)
+    -Make something appear in the popup:
+        -Include the title of the extension
+        -Include what version the extension is on
+        -Include a link to the settings page
+        
     -Add a settings page:
         -Include an option to turn off dark mode
         -Include an option to remove the AI response to questions

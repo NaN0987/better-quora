@@ -18,6 +18,8 @@ const qs_questionComments = "#mainContent > div.q-box.qu-bg--raised > div:nth-ch
 
 const qs_commentAuthor = "div > div > div > div > div > div > div > div.q-flex.qu-alignItems--flex-start > div > div.q-box > span.q-box > span > div > a > div > span > span"
 
+const qs_commentContent = "div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"
+
 //Removing "promoted" posts
 function removeDataNosnippet(){
   const ads = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
@@ -97,10 +99,12 @@ function scrapCommentSection(){
     //state how many comments there are
     console.log("Number of comments: ", comments.length)
     if (comments.length === 1){
+      //one comment
       commentsButton.querySelector("h6").innerText = "1 Comment"
     }
     else if(comments[comments.length-1]?.querySelector("button")){
-      commentsButton.querySelector("h6").innerText = comments.length + "+ Comments"
+      //more comments than can be loaded (_+ Comments)
+      commentsButton.querySelector("h6").innerText = (comments.length-1) + "+ Comments"
     }
     else{
       commentsButton.querySelector("h6").innerText = comments.length + " Comments"
@@ -110,13 +114,17 @@ function scrapCommentSection(){
     
     //check each comment to see if it's from Quora Details bot or the original poster, and add its text to details
     comments.forEach((comment) => {
+
       const author = comment.querySelector(qs_commentAuthor)
       if (author){
-        if (author.innerText === "Quora Question Details Bot"){
-          details.push(comment.querySelector("div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"))
+        /* When the original poster makes a comment, a little svg icon appears. However, it doesn't appear immediatly, 
+           so instead you have to queryselect the span that will contain it. */
+        // Also you have to use ":scope" because comments can have comments.
+        if ((author.innerText === "Quora Question Details Bot") || (comment.querySelector(":scope > div > div > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-flex.qu-alignItems--flex-start span[width='16']"))){
+          details.push(comment.querySelector(qs_commentContent))
         }
       }
-      else{
+      else if (!comment.querySelector("button")){
         console.warn("Apparently this comment doesn't have an author: ", comment)
       }
     })
