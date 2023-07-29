@@ -1,3 +1,5 @@
+console.log("extension is running")
+
 //querySelector constants
 //if the website changes and we have to chanage the queryselectors, these constants should make that easier
 const qs_dataNosnippet = 'span[data-nosnippet="true"]'
@@ -16,9 +18,9 @@ const qs_bottomRelatedQuestions = "#mainContent > div.q-box.qu-mt--small > div.d
 
 const qs_questionComments = "#mainContent > div.q-box.qu-bg--raised > div:nth-child(2) > div.q-box"
 
-const qs_commentAuthor = "div > div > div > div > div > div > div > div.q-flex.qu-alignItems--flex-start > div > div.q-box > span.q-box > span > div > a > div > span > span"
+const qs_commentAuthor = ":scope > div > div > div > div > div > div > div > div.q-flex.qu-alignItems--flex-start > div > div.q-box > span.q-box > span > div > a > div > span > span"
 
-const qs_commentContent = "div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"
+const qs_commentContent = ":scope > div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"
 
 //Removing "promoted" posts
 function removeDataNosnippet(){
@@ -93,6 +95,14 @@ function scrapCommentSection(){
 
   //Activates when the iframe loads
   iframe.onload = function(){
+
+    //click all (more) buttons
+    const moreButtons = iframe.contentWindow.document.querySelectorAll("div.QTextTruncated__StyledReadMoreLink-sc-1pev100-3")
+
+    moreButtons.forEach((button) => {
+      button.click()
+    })
+
     //select all of the comments
     const comments = iframe.contentWindow.document.querySelectorAll(qs_questionComments)
 
