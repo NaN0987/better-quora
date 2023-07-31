@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Quora but Less Shitty",
     "description": "Makes Quora's website easier to use by removing unrelated posts, showing question details, and setting the theme to dark mode.",
-    "version": "0.8.1",
+    "version": "0.9.0",
     "icons": { 
       "16": "images/icon-16.png",
       "32": "images/icon-32.png",
@@ -13,6 +13,8 @@
     "action": {
       "default_popup": "popup/popup.html"
     },
+
+    "options_page": "options/options.html",
 
     "host_permissions": [
       "https://*.quora.com/"

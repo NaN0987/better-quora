@@ -13,11 +13,6 @@ Current features:
         -All comments from the Quora Question Details Bot and the original poster will appear under the question title
 
 Planned features:
-    -Make something appear in the popup:
-        -Include the title of the extension
-        -Include what version the extension is on
-        -Include a link to the settings page
-        
     -Add a settings page:
         -Include an option to turn off dark mode
         -Include an option to remove the AI response to questions

@@ -65,10 +65,10 @@ function changeCookieValue(cookieDetails, value){
 }
 
 function removeSignupWall(){
-  //chrome.cookies.remove(m_s)
-  //chrome.cookies.remove(m_b)
-  //chrome.cookies.remove(m_b_lax)
-  //chrome.cookies.remove(m_b_strict)
+  chrome.cookies.remove(m_s)
+  chrome.cookies.remove(m_b)
+  chrome.cookies.remove(m_b_lax)
+  chrome.cookies.remove(m_b_strict)
   chrome.cookies.remove(m_signup_form_type) 
 }
 

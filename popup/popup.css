@@ -1,0 +1,38 @@
+body {
+    min-width: 220px;
+    margin: 10px;
+}
+
+.titleFlex {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: -7px;
+}
+
+.titleFlex img {
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+}
+
+.titleFlex h1 {
+    margin-bottom: 0px;
+    margin-top: 7px;
+
+    font-size: 2.4em;
+    white-space: nowrap;
+    height: 45px;
+}
+
+.version {
+    color: gray;
+    font-size: 17px;
+}
+
+.linkFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-top: 25px;
+}
