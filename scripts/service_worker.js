@@ -31,6 +31,12 @@ const m_theme = {
   url: "https://quora.com",
 }
 
+//default settings
+const defaultSettings = {
+  theme: "dark",
+  removeAIResponse: true,
+}
+
 //This function allows you to change the value of a cookie using only its CookieDetails (unlike chrome.cookies.set())
 //cookie: CookieDetails, value: string
 function changeCookieValue(cookieDetails, value){
@@ -64,7 +70,7 @@ function changeCookieValue(cookieDetails, value){
   })
 }
 
-function removeSignupWall(){
+function removeTrackerCookies(){
   chrome.cookies.remove(m_s)
   chrome.cookies.remove(m_b)
   chrome.cookies.remove(m_b_lax)
@@ -80,14 +86,29 @@ function setLightMode(){
   changeCookieValue(m_theme, "light")
 }
 
+async function setDefaultSettings(){
+  //await chrome.storage.local.clear()
+  const settings = await chrome.storage.local.get(null)
+  console.log(settings)
+  for(const key in defaultSettings){
+    if(!settings.hasOwnProperty(key)){
+      let obj = {}
+      obj[key] = defaultSettings[key]
+      chrome.storage.local.set(obj)
+    }
+  }
+}
+
 //Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details){
   if(details.reason == "install"){
     //run code on first install
     setDarkMode()
+    setDefaultSettings()
   }
   else if(details.reason == "update"){
     //run code on update
+    setDefaultSettings()
   }
 })
 
@@ -97,10 +118,23 @@ function sleep(ms) {
 }
 
 chrome.runtime.onMessage.addListener(function(message){
-  if(message.message === "fetchQuestionDetails"){
-    //run code when loading up quora
-    console.log("message recieved!")
-    //fetchTesting()
+  console.log("message recieved!")
+  
+  //deleting tracker cookies
+  if(message.action === "deleteTrackerCookies"){
+    removeTrackerCookies()
+  }
+
+  //changing theme
+  else if(message.action === "changeTheme"){
+    if(message.details === "light"){
+      setLightMode()
+    }
+    else if (message.details === "dark"){
+      setDarkMode()
+    }
+    else{
+      console.warn("Unknown theme: ", message.details)
+    }
   }
 })
-

@@ -13,9 +13,8 @@ Current features:
         -All comments from the Quora Question Details Bot and the original poster will appear under the question title
 
 Planned features:
-    -Add a settings page:
-        -Include an option to turn off dark mode
-        -Include an option to remove the AI response to questions
+    -settings page:
+        -Include an option to remove the AI response to questions (that actually works)
         -Include an option to remove "related questions" box in feed
         -Include an option to have the main signup page (www.quora.com) redirect you to the search page (www.quora.com/search?q=%00)
     
