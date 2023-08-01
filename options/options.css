@@ -2,6 +2,18 @@ p {
     color: gray;
 }
 
+button {
+    cursor: pointer;
+}
+
+input {
+    cursor: pointer;
+}
+
+select {
+    cursor: pointer;
+}
+
 .mainContainer {
     width: 50%;
     margin: auto;
@@ -9,7 +21,7 @@ p {
 
     border-style: solid;
     border-width: 5px;
-    border-color: red;
+    border-color: rgb(236, 28, 36);
     border-radius: 20px;
 }
 
@@ -38,7 +50,6 @@ p {
 
 .option select {
     max-height: 30px;
-    cursor: pointer;
 }
 
 .option:first-child {
@@ -49,7 +60,9 @@ p {
     background-color: rgb(43, 148, 253);
     color: white;
     border-radius: 5px;
-    cursor: pointer;
+
+    width: 60px;
+    height: 30px;
 }
 
 #saveButton:disabled {

@@ -22,6 +22,9 @@ const qs_commentAuthor = ":scope > div > div > div > div > div > div > div > div
 
 const qs_commentContent = ":scope > div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"
 
+//wait until user settings are obtained
+chrome.storage.local.get(null, function(settings){
+
 //Removing "promoted" posts
 function removeDataNosnippet(){
   const ads = document.querySelectorAll(qs_dataNosnippet) //Note: this also selects ads that are already hidden. fix later
@@ -33,6 +36,22 @@ function removeDataNosnippet(){
     })
   }
 }
+
+//Removing AI response
+function removeAIResponse(){
+  const relatedBoxes = document.querySelectorAll(qs_relatedQuestionBox)
+  
+  if (relatedBoxes.length > 0){
+
+    relatedBoxes.forEach((element) => {
+      //only remove if it's the AI response
+      if((element.firstChild.style.position === "relative")){
+        element.style.display = "none"
+      }
+    })
+  }
+}
+
 
 //Removing related question boxes
 function removeRelatedQuestions(){
@@ -162,14 +181,20 @@ function scrapCommentSection(){
   }
 }
 
+
+
 //callback for observer
 const cb_docChange = (mutationsList, observer) => {
   for (const mutation of mutationsList){
     if (mutation.type === 'childList'){
       //Code here runs when something on the webpage changes
+
       console.log("change detected")
       removeDataNosnippet()
-      removeRelatedQuestions()
+
+      if(settings.removeRelatedQuestionsBox){
+        removeRelatedQuestions()
+      }
     }
   }
 }
@@ -199,7 +224,14 @@ if (questionFeed){
   sideAd?.remove()
 
   //Remove "related questions" at the bottom of the screen
-  removeRelatedQuestions()
+  if(settings.removeRelatedQuestionsBox){
+    removeRelatedQuestions()
+  }
+
+  //Remove AI response under question
+  if(settings.removeAIResponse){
+    removeAIResponse()
+  }
 
   //Remove ad under header (as well as promoted posts)
   removeDataNosnippet()
@@ -207,3 +239,4 @@ if (questionFeed){
   const observer = new MutationObserver(cb_docChange)
   observer.observe(questionFeed, {childList: true, subtree: true,})
 }
+})

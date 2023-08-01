@@ -34,7 +34,8 @@ const m_theme = {
 //default settings
 const defaultSettings = {
   theme: "dark",
-  removeAIResponse: true,
+  removeAIResponse: false,
+  removeRelatedQuestionsBox: true
 }
 
 //This function allows you to change the value of a cookie using only its CookieDetails (unlike chrome.cookies.set())

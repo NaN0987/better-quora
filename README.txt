@@ -11,11 +11,13 @@ Current features:
     -Adds a "comments" button to the question that shows how many questions there are
     -Adds question details (if available):
         -All comments from the Quora Question Details Bot and the original poster will appear under the question title
+    
+    -Optional features:
+        -Removing the AI response that appears under questions
 
 Planned features:
-    -settings page:
-        -Include an option to remove the AI response to questions (that actually works)
-        -Include an option to remove "related questions" box in feed
+    -Optional features:
+        -Include an option to turn off scraping the comments section (which would reduce lag for those on lower end systems)
         -Include an option to have the main signup page (www.quora.com) redirect you to the search page (www.quora.com/search?q=%00)
     
     -Make Quora Plus questions easier to read by removing the fade out (and look into getting around the Quora plus block by removing cookies).
