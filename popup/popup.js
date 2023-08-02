@@ -12,5 +12,5 @@ version.textContent = "Version " + manifest.version
 //link to options page
 const settingsButton = document.querySelector("#settingsButton")
 settingsButton.addEventListener("click", function(){
-    chrome.runtime.openOptionsPage()
+  chrome.runtime.openOptionsPage()
 })
