@@ -1,0 +1,5 @@
+#Don't track modules folder
+node_modules/
+
+#Or any vscode stuff
+.vscode/
