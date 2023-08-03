@@ -24,17 +24,10 @@ async function main(){
     for(const option in settings){
       const settingElement = document.querySelector("#" + option)
       
-      if(settingElement.nodeName === "INPUT"){
-        let state = settingElement.checked
-        if (state !== settings[option]){
-          result[option] = state
-        }
-      }
-      else if(settingElement.nodeName === "SELECT"){
-        let state = settingElement.value
-        if (state !== settings[option]){
-          result[option] = state
-        }
+      const state = (settingElement.checked ?? settingElement.value)
+
+      if(state !== settings[option]){
+        result[option] = state
       }
     }
     return result

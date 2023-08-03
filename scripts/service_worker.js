@@ -91,11 +91,10 @@ async function setDefaultSettings(){
   //await chrome.storage.local.clear()
   const settings = await chrome.storage.local.get(null)
   console.log(settings)
+  //every key in defaultSettings that doesn't exist in settings is added to settings
   for(const key in defaultSettings){
     if(!settings.hasOwnProperty(key)){
-      let obj = {}
-      obj[key] = defaultSettings[key]
-      chrome.storage.local.set(obj)
+      chrome.storage.local.set({ [key]: defaultSettings[key] });
     }
   }
 }
