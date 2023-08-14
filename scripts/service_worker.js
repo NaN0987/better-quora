@@ -35,7 +35,8 @@ const m_theme = {
 const defaultSettings = {
   theme: "dark",
   removeAIResponse: false,
-  removeRelatedQuestionsBox: true
+  removeRelatedQuestionsBox: true,
+  redirectToSearchPage: false
 }
 
 //This function allows you to change the value of a cookie using only its CookieDetails (unlike chrome.cookies.set())
@@ -94,7 +95,7 @@ async function setDefaultSettings(){
   //every key in defaultSettings that doesn't exist in settings is added to settings
   for(const key in defaultSettings){
     if(!settings.hasOwnProperty(key)){
-      chrome.storage.local.set({ [key]: defaultSettings[key] });
+      chrome.storage.local.set({ [key]: defaultSettings[key] })
     }
   }
 }
@@ -114,7 +115,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 //Sleeping function for testing
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 chrome.runtime.onMessage.addListener(function(message){

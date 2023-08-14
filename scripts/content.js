@@ -22,8 +22,36 @@ const qs_commentAuthor = ":scope > div > div > div > div > div > div > div > div
 
 const qs_commentContent = ":scope > div > div.q-relative.qu-pb--tiny > div > div > div > div > div.q-box.qu-ml--small.qu-flex--auto > div.q-text"
 
+//Remove query strings (?) and fragment identifier (#)
+//Returns string
+function reformatURL(url){
+  let result = url
+
+  //remove query strings
+  const queryStringIndex = result.indexOf('?')
+  if (queryStringIndex !== -1){
+    result = result.slice(0, queryStringIndex)
+  } 
+  
+  //remove fragment identifiers
+  const fragmentIndex = url.indexOf('#')
+  if (fragmentIndex !== -1){
+    result = result.slice(0, fragmentIndex)
+  } 
+
+  return result
+}
+
+const formattedURL = reformatURL(document.URL)
+
 //wait until user settings are obtained
 chrome.storage.local.get(null, function(settings){
+
+  //redirect from home page
+  if(settings.redirectToSearchPage && (formattedURL.endsWith("quora.com/"))){
+    console.log("engage redirect")
+    window.location.href = formattedURL + "search?q=%00"
+  }
 
   //Removing "promoted" posts
   function removeDataNosnippet(){
@@ -52,7 +80,6 @@ chrome.storage.local.get(null, function(settings){
     }
   }
 
-
   //Removing related question boxes
   function removeRelatedQuestions(){
     //Removed related box at the bottom
@@ -75,31 +102,11 @@ chrome.storage.local.get(null, function(settings){
     }
   }
 
-  //Remove query strings (?) and fragment identifier (#)
-  //Returns string
-  function reformatURL(url){
-    let result = url
-
-    //remove query strings
-    const queryStringIndex = result.indexOf('?')
-    if (queryStringIndex !== -1){
-      result = result.slice(0, queryStringIndex)
-    } 
-    
-    //remove fragment identifiers
-    const fragmentIndex = url.indexOf('#')
-    if (fragmentIndex !== -1){
-      result = result.slice(0, fragmentIndex)
-    } 
-
-    return result
-  }
-
   //Add "comments" button to post and adds question details if available
   function scrapCommentSection(){
     const questionTitle = document.querySelector(qs_questionTitle)
 
-    const htmlCode = '<hr/><a href="' + reformatURL(document.URL) + '/comments' + '"><h6 style="text-decoration: underline;">Comments</h6></a>'
+    const htmlCode = '<hr/><a href="' + formattedURL + '/comments' + '"><h6 style="text-decoration: underline;">Comments</h6></a>'
 
     const commentsButton = document.createElement('div')
     commentsButton.innerHTML = htmlCode
@@ -108,7 +115,7 @@ chrome.storage.local.get(null, function(settings){
 
     //load iframe of comments section
     const iframe = document.createElement('iframe')
-    iframe.src = reformatURL(document.URL) + '/comments'
+    iframe.src = formattedURL + '/comments'
     iframe.style.display = 'none'
     commentsButton.insertAdjacentElement('afterend', iframe)
 

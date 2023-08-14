@@ -14,15 +14,15 @@ A google chrome extension designed to make Quora's website easier to use by remo
   - All comments from the Quora Question Details Bot and the original poster will appear under the question title
 - Optional features:
   - Removing the AI response that appears under questions
+  - Having the main signup page (www.quora.com) redirect you to the search page (www.quora.com/search?q=%00)
 
 ## Planned features
 - Optional features:
   - Include an option to turn off scraping the comments section (which would reduce lag for those on lower end systems)
-  - Include an option to have the main signup page (www.quora.com) redirect you to the search page (www.quora.com/search?q=%00)
 - Make Quora Plus questions easier to read by removing the fade out (and look into getting around the Quora plus block by removing cookies)
 - Add a button under Quora Plus questions to view the question in incognito mode (thus bypassing the paywall)
 - Compatibility:
-  - Mobile support (not tested)
+  - Mobile support (currently does not work on mobile)
   - Support for those who are logged into a quora account (not tested)
 - Allow those not signed in to see the comments on answers (not sure if this is possible)
 - Make the search bar work better by automatically reloading the page (needs testing)
