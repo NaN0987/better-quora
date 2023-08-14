@@ -44,6 +44,25 @@ function reformatURL(url){
 
 const formattedURL = reformatURL(document.URL)
 
+//Returns a string containing the subdomain of the url
+function getSubdomain(url){
+  let result = url
+
+  const protocolIndex = result.indexOf("://")
+  result = result.slice(protocolIndex+3, result.length)
+
+  const period = result.indexOf('.')
+
+  return result.slice(0, period)
+}
+
+const languageList = ["www", "es", "fr", "de", "it", "jp", "id", "pt", "hi", "nl", "da", "fi", "no", "sv", "mr", "bn", "ta", "ar", "he", "gu", "kn", "ml", "te", "pl"]
+
+const subdomain = getSubdomain(formattedURL)
+
+//If the subdomain does not exist in the languageList, then it is a quora space and code should not execute
+if(languageList.includes(subdomain)){
+
 //wait until user settings are obtained
 chrome.storage.local.get(null, function(settings){
 
@@ -247,3 +266,4 @@ chrome.storage.local.get(null, function(settings){
     observer.observe(questionFeed, {childList: true, subtree: true,})
   }
 })
+}
