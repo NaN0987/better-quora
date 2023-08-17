@@ -207,6 +207,42 @@ chrome.storage.local.get(null, function(settings){
     }
   }
 
+  //Reveal more of the Quora plus questions
+  function improveQuoraPlus(){
+    const paywalls = document.querySelectorAll("div.qu-zIndex--inline_overlay")
+
+    for(const paywall of paywalls){
+      //Lower paywall
+      paywall.style.marginTop = "0px"
+      //Remove fadeout
+      paywall.parentElement.querySelector("div.qu-overflowY--hidden").classList.remove("jRIvsV")
+
+      //Incognito button test
+      const test = document.createElement("a")
+      test.style.cursor = "pointer"
+      test.style.textDecoration = "underline"
+      test.textContent = "View Full Answer in Incognito Mode"
+      test.classList.add("incognitoButton")
+
+      //open window on click
+      test.addEventListener("click", function(){
+        chrome.runtime.sendMessage({
+          action: "createWindow", 
+          windowObject: {
+            url: document.URL,
+            incognito: true,
+            type: "normal"
+          }
+        })
+      })
+
+      //prevents answers with button from getting a second button
+      if(!paywall.parentElement.parentElement.querySelector("a.incognitoButton")){
+        paywall.parentElement.insertAdjacentElement("afterend", test)
+      }
+    }
+  }
+
 
 
   //callback for observer
@@ -221,6 +257,8 @@ chrome.storage.local.get(null, function(settings){
         if(settings.removeRelatedQuestionsBox){
           removeRelatedQuestions()
         }
+
+        improveQuoraPlus()
       }
     }
   }

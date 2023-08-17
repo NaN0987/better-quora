@@ -43,7 +43,7 @@ const defaultSettings = {
 //cookie: CookieDetails, value: string
 function changeCookieValue(cookieDetails, value){
   chrome.cookies.get(cookieDetails, function(cookie){
-    console.log(cookie)
+    console.log("Obtained cookie: ", cookie)
     if(cookie){
       chrome.cookies.set({
         url: cookieDetails.url,
@@ -121,21 +121,30 @@ function sleep(ms) {
 chrome.runtime.onMessage.addListener(function(message){
   console.log("message recieved!")
   
-  //deleting tracker cookies
-  if(message.action === "deleteTrackerCookies"){
-    removeTrackerCookies()
+  //"message.action" contains what the service worker should do
+  switch(message.action){
+    case "deleteTrackerCookies":
+      removeTrackerCookies()
+      break
+
+    case "changeTheme":
+      if(message.details === "light"){
+        setLightMode()
+      }
+      else if (message.details === "dark"){
+        setDarkMode()
+      }
+      else{
+        console.warn("Unknown theme: ", message.details)
+      }
+      break
+    
+    case "createWindow":
+      chrome.windows.create(message.windowObject)
+    
+    default:
+      console.warn("Unknown message: ", message.action)
+      break
   }
 
-  //changing theme
-  else if(message.action === "changeTheme"){
-    if(message.details === "light"){
-      setLightMode()
-    }
-    else if (message.details === "dark"){
-      setDarkMode()
-    }
-    else{
-      console.warn("Unknown theme: ", message.details)
-    }
-  }
 })
