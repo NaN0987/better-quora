@@ -217,28 +217,38 @@ chrome.storage.local.get(null, function(settings){
       //Remove fadeout
       paywall.parentElement.querySelector("div.qu-overflowY--hidden").classList.remove("jRIvsV")
 
-      //Incognito button test
-      const test = document.createElement("a")
-      test.style.cursor = "pointer"
-      test.style.textDecoration = "underline"
-      test.textContent = "View Full Answer in Incognito Mode"
-      test.classList.add("incognitoButton")
+      //Add Incognito button
+      const incognitoButton = document.createElement("a")
+      incognitoButton.style.cursor = "pointer"
+      incognitoButton.style.textDecoration = "underline"
+      incognitoButton.style.textAlign = "center"
+      incognitoButton.style.marginTop = "7px"
+      incognitoButton.style.display = "block"
+      incognitoButton.textContent = "View Full Answer in Incognito Mode"
+      incognitoButton.classList.add("incognitoButton")
+
+      //Get the link to the exact post
+      const link = paywall.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector("a.q-box").href
+      
+      const postLink = formattedURL + "/answer/" + link.substring(link.indexOf("/profile/") + 9)
+
 
       //open window on click
-      test.addEventListener("click", function(){
+      incognitoButton.addEventListener("click", function(){
         chrome.runtime.sendMessage({
           action: "createWindow", 
           windowObject: {
-            url: document.URL,
+            url: postLink,
             incognito: true,
-            type: "normal"
+            type: "normal",
+            state: "maximized"
           }
         })
       })
 
       //prevents answers with button from getting a second button
       if(!paywall.parentElement.parentElement.querySelector("a.incognitoButton")){
-        paywall.parentElement.insertAdjacentElement("afterend", test)
+        paywall.parentElement.insertAdjacentElement("afterend", incognitoButton)
       }
     }
   }
